@@ -1,0 +1,25 @@
+{% extends 'base.jinja2' %}
+
+{% block subtitle %}Single Donor Donations{% endblock subtitle %}
+
+{% block content %}
+<form method='GET'>
+    {% if error %}
+    <p>
+    {{error}}
+    <label for="donor-input">Current List of Donors:</label>
+    {% for donor in donors %}
+    <li>{{ donor.name }}</li>
+    {% endfor %}
+    </p>
+    {% endif %}
+    <label for="donor-input">Donor:</label><input id="donor-input" type="text" name="donor"><br>
+    <input type="submit" value="Show Donations">
+    {% if donations %}
+        <br><label for="donor-input">Donations by {{donor}}</label>
+        {% for donation in donations %}
+            <li>{{ donation.value }}</li>
+        {% endfor %}
+    {% endif %}
+</form>
+{% endblock content %}
