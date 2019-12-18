@@ -33,6 +33,23 @@ def create():
     else: # GET request, display create template
         return render_template('create.jinja2')
 
+@app.route('/singledonor')
+def singledonor():
+    donor_name = request.args.get('donor',None)
+    # Check if donor has been submitted, otherwise user visiting for first time
+    if not donor_name: # No donor name supplied, redirect to page
+        return render_template('single.jinja2')
+    else: # Donor name supplied, gather donations and inject to page
+        try:
+            donor = Donor.select().where(Donor.name == donor_name).get()
+        except Donor.DoesNotExist:
+            return render_template('single.jinja2',
+                                    error='Error, donor \'{}\' not found in database.'.format(donor_name),
+                                    donors=Donor.select())
+        donations = Donation.select().where(Donation.donor == donor)
+        return render_template('single.jinja2', donor=donor.name, donations=donations)
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 6738))
     app.run(host='0.0.0.0', port=port)
