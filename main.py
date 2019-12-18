@@ -20,7 +20,12 @@ def all():
 def create():
     if request.method == 'POST': # POST request, process donation
         # Retrieve donor using name from form
-        donor = Donor.select().where(Donor.name == request.form['donor']).get()
+        try:
+            donor = Donor.select().where(Donor.name == request.form['donor']).get()
+        except Donor.DoesNotExist:
+            return render_template('create.jinja2',
+                                    error='Error, donor \'{}\' not found in database.'.format(request.form['donor']),
+                                    donors=Donor.select())
         # Add donation to database, credited to donor
         Donation(value=request.form['donation'], donor=donor).save()
         # Redirect to home page

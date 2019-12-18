@@ -4,6 +4,15 @@
 
 {% block content %}
 <form method="POST">
+    {% if error %}
+    <p>
+    {{error}}
+    <label for="donor-input">Current List of Donors:</label>
+    {% for donor in donors %}
+    <li>{{ donor.name }}</li>
+    {% endfor %}
+    </p>
+    {% endif %}
     <label for="donor-input">Donor:</label><input id="donor-input" type="text" name="donor"><br>
     <label for="donation-input">Donation Amount:</label><input id="donation-input" type="text" name="donation"><br>
     <input type="submit" value="Add">
